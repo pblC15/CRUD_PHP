@@ -1,0 +1,72 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Acme&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Viga&display=swap');
+*{
+    padding:0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Viga', sans-serif;
+}
+.container{
+    width:100%;
+    max-width:1300px;
+    margin:0 auto;
+
+}
+header.cabecalho{
+    background: rgb(6,64,157);
+    background: linear-gradient(5deg, rgba(6,64,157,1) 54%, rgba(0,212,255,1) 100%);
+    width:100%;
+    color:#FFF;
+  
+}
+
+header.cabecalho .container{
+    display: flex;
+    justify-content: space-between;
+    padding:10px 0;
+}
+.logo a{
+    text-decoration: none;
+    color:transparent;
+}
+.logo h1{
+    font-size:4.5em;
+    color:#FFF;
+}
+
+nav.menu ul{
+    list-style: none;
+    display: flex;
+}
+
+nav.menu ul li{
+    padding: 20px 20px;
+    margin: 0 20px;
+    font-size: 1.3em;
+}
+nav.menu ul li:hover{
+    cursor:pointer;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+.listHeader{
+    padding: 10px 8px;
+}
+.listHeader h1{
+    margin-left: 50px;
+}
+.container1{
+    display:flex;
+    justify-content: space-between;
+    padding:20px;
+}
+.formInsert form{
+    padding:20px 50px;
+}
+.listUser{
+    flex-basis:60%;
+}
+.formInsert{
+    flex-basis:40%;
+}
