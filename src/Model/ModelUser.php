@@ -2,6 +2,10 @@
 
 namespace src\Model;
 
+//Verificar erros 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 use src\Database\Connect;
 use PDO;
 
@@ -15,15 +19,17 @@ class ModelUser{
 
     public function __construct($first_name, $last_name, $email, $document)
     {   
+        $cpfFirst = (filter_var($document, FILTER_SANITIZE_STRING) ? $document : NULL);
+        $cpf = preg_replace("/[^0-9]/", "", $cpfFirst);
+        $this->document = $cpf;
         $this->first_name = (filter_var($first_name, FILTER_SANITIZE_STRING) ? $first_name : NULL);
         $this->last_name = (filter_var($last_name, FILTER_SANITIZE_STRING) ? $last_name : NULL);
-        $this->email = (filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : NULL);
-        $this->document = (filter_var($document, FILTER_SANITIZE_STRING) ? $document : NULL);
+        $this->email = (filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : NULL);       
         
     }
 
 
-    public function required(){
+public function required(){
 
         if(empty($this->first_name) || empty($this->last_name) || empty($this->document)){
             
@@ -38,19 +44,21 @@ class ModelUser{
 
     }
 
+    //Verifica se o email ou CPF já existe
     public function validateUser(){
-
+       
+        //Verifica se email existe
         if($this->email){
 
-            $sql = "SELECT email FROM users WHERE email = :email";
+            $sql = "SELECT * FROM users WHERE email = :email";
 
             $stmt = Connect::getInstance()->prepare($sql);
             $stmt->bindParam(":email", $this->email, PDO::PARAM_STR);
             $stmt->execute();
 
-            if($stmt->rowCount() > 1){
+            if($stmt->rowCount() >= 1){
 
-                Header("Location: listUser.php?mens=existE");
+                Header("Location: listUser.php?error=existE");
                 exit();
             }
         
@@ -58,12 +66,16 @@ class ModelUser{
 
         if($this->document){
 
-            $sql = "SELECT document FROM users WHERE document = :document";
+            $sql = "SELECT * FROM users WHERE document = :document";
             $stmt = Connect::getInstance()->prepare($sql);
             $stmt->bindParam(":document", $this->document, PDO::PARAM_STR);
             $stmt->execute();
 
-            if($stmt->rowCount() > 1){
+            // var_dump($stmt);
+            // echo "<br>".$cpf."<br>".$sql;
+            // exit();
+
+            if($stmt->rowCount() >= 1){
 
                 Header("Location: listUser.php?error=existC");
                 exit();
@@ -80,7 +92,6 @@ class ModelUser{
         if(empty($cpf)) {
             
             Header("Location: listUser.php?error=invalidC");
-            echo $cpf;
             exit();
 
         }
@@ -88,7 +99,6 @@ class ModelUser{
         if(strlen($cpf) != 11) {
 
             Header("Location: listUser.php?error=invalidC");
-            echo $cpf."esse";
             exit();
           
         }else if($cpf === '00000000000' ||
@@ -103,7 +113,6 @@ class ModelUser{
             $cpf == '99999999999') {
         
             Header("Location: listUser.php?error=invalidC");
-            echo $cpf."aqui";
             exit();
             
          } 
@@ -115,12 +124,6 @@ class ModelUser{
     //Inserir novo usuário
     public function createUser(){
 
-        //Verificar se o CPF é valido
-    //    if($this->validateCpf()){
-    //         Header("Location: listUser.php?error=invalidC");
-    //         echo "não";
-    //         exit();
-    //    }
 
        $this->validateCpf();
 

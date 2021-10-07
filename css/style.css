@@ -29,6 +29,9 @@ header.cabecalho .container{
     text-decoration: none;
     color:transparent;
 }
+.logo a:hover{
+    text-decoration: none;
+}
 .logo h1{
     font-size:4.5em;
     color:#FFF;
@@ -69,4 +72,7 @@ nav.menu ul li:hover{
 }
 .formInsert{
     flex-basis:40%;
+}
+table .tdList{
+    text-align: center;
 }
